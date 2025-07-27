@@ -1,0 +1,96 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// =======================
+// TABLE: User
+// =======================
+model user {
+  id         String      @id @default(uuid())
+  user_name   String     
+  email      String      @unique
+  password   String
+  role       Role
+  created_at  DateTime    @default(now())
+  updated_at  DateTime?   @updatedAt
+  deleted_at  DateTime?
+
+  // Relasi
+  transaksi  transaksi[]
+  barang     barang[]       
+}
+
+// ENUM untuk Role
+enum Role {
+  admin
+  user
+}
+
+// =======================
+// TABLE: Barang
+// =======================
+model barang {
+  id         String     @id @default(uuid())
+  nama       String
+  kategori   String
+  stok       Int
+  satuan     String
+  user_id     String                  
+  created_at  DateTime   @default(now())
+  updated_at  DateTime?  @updatedAt
+  deleted_at  DateTime?
+
+  // Relasi
+  user   user             @relation(fields: [user_id], references: [id])
+  detail transaksi_detail[]
+}
+
+// =======================
+// TABLE: Transaksi
+// =======================
+model transaksi {
+  id             String             @id @default(uuid())
+  user_id         String
+  jenis_transaksi JenisTransaksi
+  invoice_number  String
+  bukti_pembayaran String?
+  tanggal        DateTime
+  grand_total     Float
+  created_at      DateTime           @default(now())
+  updated_at      DateTime?          @updatedAt
+  deleted_at      DateTime?
+
+  // Relasi
+  user   user            @relation(fields: [user_id], references: [id])
+  detail transaksi_detail[]
+}
+
+// ENUM untuk Jenis Transaksi
+enum JenisTransaksi {
+  penjualan
+  pembelian
+}
+
+// =======================
+// TABLE: TransaksiDetail
+// =======================
+model transaksi_detail {
+  id           String     @id @default(uuid())
+  transaksi_id  String
+  barang_id     String
+  jumlah       Int
+  harga_satuan  Float
+  total_harga   Float
+  created_at    DateTime   @default(now())
+  updated_at    DateTime?  @updatedAt
+  deleted_at    DateTime?
+
+  // Relasi
+  transaksi transaksi @relation(fields: [transaksi_id], references: [id])
+  barang    barang    @relation(fields: [barang_id], references: [id])
+}
