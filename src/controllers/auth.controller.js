@@ -15,7 +15,19 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
   try {
     const { email, password } = req.body;
+
+    // Panggil service
     const result = await authService.login({ email, password });
+
+    // Tambahkan set cookie
+    res.cookie('token', result.access_token, {
+      httpOnly: true,          // tidak bisa diakses oleh JS di browser
+      secure: false,           // true kalau sudah HTTPS
+      sameSite: 'strict',      // cegah CSRF
+      maxAge: 7 * 24 * 60 * 60 * 1000 // 7 hari
+    });
+
+    // Kirim response
     return success(res, 'Login berhasil', result, 200);
   } catch (err) {
     next(err);
