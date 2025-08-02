@@ -56,6 +56,7 @@ model barang {
 model transaksi {
   id             String             @id @default(uuid())
   user_id         String
+  nama            String
   jenis_transaksi JenisTransaksi
   invoice_number  String
   bukti_pembayaran String?
