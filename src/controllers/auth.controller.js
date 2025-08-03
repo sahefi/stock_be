@@ -35,8 +35,17 @@ exports.login = async (req, res, next) => {
   }
 };
 
+exports.logout= async (req, res, next) => {
+  res.clearCookie('token', {
+    httpOnly: true,          // tidak bisa diakses oleh JS di browser
+    secure: false,           // true kalau sudah HTTPS
+    sameSite: 'lax',      // cegah CSRF    
+  });
+  return res.json({ message: 'Logout berhasil' });
+}
+
 exports.updateProfile = async (req, res, next) => {
-  try {    
+  try {
     const payload = only(req.body, ['user_name', 'email']);
     payload.id = req.user.id;
     const auth = await authService.updateProfile(payload.id, payload);
@@ -47,7 +56,7 @@ exports.updateProfile = async (req, res, next) => {
 };
 
 exports.authMe = async (req, res, next) => {
-  try {        
+  try {
     const id = req.user.id;
     const auth = await authService.authMe(id);
     return success(res, 'Profile berhasil ditampilkan', auth);

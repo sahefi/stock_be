@@ -42,6 +42,7 @@ async function login({ email, password }) {
   const user = await prisma.user.findUnique({
     where: { email }
   });
+  
   if (!user) {
     const error = new Error('Email tidak ditemukan');
     error.statusCode = 404;
@@ -55,6 +56,13 @@ async function login({ email, password }) {
     error.statusCode = 401;
     throw error;
   }
+
+   await prisma.user.update({
+    where: { email },
+    data: {
+      login_count: { increment: 1 }
+    }
+  });
 
   // generate token
   const token = jwt.sign(
