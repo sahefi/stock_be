@@ -66,6 +66,7 @@ async function login({ email, password }) {
     process.env.JWT_SECRET,
     { expiresIn: '7d' }
   );
+  
 
   // siapkan data user tanpa password
   const { password: _, ...userWithoutPassword } = user;
