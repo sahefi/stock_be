@@ -7,9 +7,7 @@ exports.createRequest = [
 
     body('stok').isInt({ min: 0 }).withMessage('Stok harus berupa angka dan minimal 0'),
 
-    body('satuan').notEmpty().withMessage('Satuan wajib diisi'),
-
-    body('user_id').notEmpty().withMessage('User ID wajib diisi').isUUID().withMessage('User ID harus berupa UUID yang valid'),
+    body('satuan').notEmpty().withMessage('Satuan wajib diisi'),    
 ];
 
 
@@ -33,11 +31,5 @@ exports.updateRequest = [
     .optional()
     .notEmpty()
     .withMessage('Satuan tidak boleh kosong'),
-
-  body('user_id')
-    .optional()
-    .notEmpty()
-    .withMessage('User ID tidak boleh kosong')
-    .isUUID()
-    .withMessage('User ID harus berupa UUID yang valid'),
+  
 ];

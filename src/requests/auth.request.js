@@ -11,3 +11,8 @@ exports.loginRequest = [
   body('email').isEmail().withMessage('Email tidak valid'),
   body('password').isLength({ min: 6 }).withMessage('Password minimal 6 karakter'),
 ];
+
+exports.profileRequest = [
+  body('user_name').notEmpty().withMessage('User name wajib diisi'),
+  body('email').isEmail().withMessage('Email tidak valid'), 
+];

@@ -2,9 +2,13 @@ const barangService = require('../services/barang.service');
 const { success } = require('../utils/response');
 const only = require('../utils/only');
 
+
+
 exports.create = async (req, res, next) => {
   try {
     const payload = only(req.body, ['nama', 'kategori', 'stok', 'satuan', 'user_id']);
+    payload.user_id = req.user.id;    
+    
     const barang = await barangService.createBarang(payload);
     return success(res, 'Barang berhasil dibuat', barang, 201);
   } catch (err) {
@@ -36,6 +40,7 @@ exports.getById = async (req, res, next) => {
 exports.update = async (req, res, next) => {
   try {    
     const payload = only(req.body, ['id','nama', 'kategori', 'stok', 'satuan', 'user_id']);
+    payload.user_id = req.user.id;
     const barang = await barangService.updateBarang(payload.id, payload);
     return success(res, 'Barang berhasil diperbarui', barang);
   } catch (err) {

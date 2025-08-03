@@ -1,5 +1,6 @@
 const { success } = require('../utils/response');
 const authService = require('../services/auth.service');
+const only = require('../utils/only');
 
 exports.register = async (req, res, next) => {
   try {
@@ -29,6 +30,17 @@ exports.login = async (req, res, next) => {
 
     // Kirim response
     return success(res, 'Login berhasil', result, 200);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.updateProfile = async (req, res, next) => {
+  try {    
+    const payload = only(req.body, ['user_name', 'email']);
+    payload.id = req.user.id;
+    const auth = await authService.updateProfile(payload.id, payload);
+    return success(res, 'Barang berhasil diperbarui', auth);
   } catch (err) {
     next(err);
   }
