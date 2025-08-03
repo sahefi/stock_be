@@ -24,7 +24,7 @@ exports.login = async (req, res, next) => {
     res.cookie('token', result.access_token, {
       httpOnly: true,          // tidak bisa diakses oleh JS di browser
       secure: false,           // true kalau sudah HTTPS
-      sameSite: 'strict',      // cegah CSRF
+      sameSite: 'lax',      // cegah CSRF
       maxAge: 7 * 24 * 60 * 60 * 1000 // 7 hari
     });
 
