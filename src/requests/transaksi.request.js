@@ -8,8 +8,7 @@ const detailValidation = [
   body('detail.*.total_harga').isFloat({ min: 0 }).withMessage('total_harga harus berupa angka minimal 0'),
 ];
 
-exports.createTransaksiRequest = [
-  body('user_id').notEmpty().withMessage('user_id tidak boleh kosong'),
+exports.createTransaksiRequest = [  
   body('nama').notEmpty().withMessage('nama tidak boleh kosong'),
   body('jenis_transaksi')
     .isIn(['penjualan', 'pembelian'])
@@ -19,8 +18,7 @@ exports.createTransaksiRequest = [
   ...detailValidation,
 ];
 
-exports.updateTransaksiRequest = [
-  body('user_id').optional().notEmpty().withMessage('user_id tidak boleh kosong'),
+exports.updateTransaksiRequest = [  
   body('nama').optional().notEmpty().withMessage('nama tidak boleh kosong'),
   body('jenis_transaksi')
     .optional()

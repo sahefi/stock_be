@@ -59,7 +59,7 @@ async function login({ email, password }) {
   // generate token
   const token = jwt.sign(
     {
-      id: user.id_user, // pastikan sesuai nama kolom di prisma
+      id: user.id, // pastikan sesuai nama kolom di prisma
       user_name: user.user_name,
       email: user.email
     },
@@ -76,5 +76,36 @@ async function login({ email, password }) {
   };
 }
 
+async function updateProfile(userId, data) {
 
-module.exports = { register,login };
+  if (data.email) {
+    const existing = await prisma.user.findFirst({
+      where: {
+        email: data.email,
+        NOT: { id: userId }
+      }
+    });
+
+    if (existing) {
+      const error = new Error('Email sudah digunakan oleh user lain');
+      error.statusCode = 400;
+      throw error;
+    }
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: userId },
+    data: data,
+    select: {
+      id: true,
+      user_name: true,
+      email: true,
+      role: true,
+      created_at: true,
+    },
+  });
+
+  return updatedUser;
+}
+
+module.exports = { register,login, updateProfile };

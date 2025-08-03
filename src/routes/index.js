@@ -5,9 +5,10 @@ const router = express.Router();
 const authController = require('../controllers/auth.controller');
 const barangController = require('../controllers/barang.controller');
 const transaksiController = require('../controllers/transaksi.controller');
+const authenticateUser = require('../middlewares/authenticateUser');
 
 // validation rules
-const { registerRequest, loginRequest } = require('../requests/auth.request');
+const { registerRequest, loginRequest, profileRequest } = require('../requests/auth.request');
 const { createRequest, updateRequest } = require('../requests/barang.request');
 
 // middleware
@@ -20,6 +21,7 @@ const { updateTransaksiRequest, createTransaksiRequest } = require('../requests/
 // ===================
 router.post('/auth/register', registerRequest, validateRequest, authController.register);
 router.post('/auth/login', loginRequest, validateRequest, authController.login);
+router.post('/auth/profile', authMiddleware,authenticateUser,profileRequest, validateRequest, authController.updateProfile);
 
 // ===================
 // Barang Routes
@@ -29,6 +31,7 @@ router.post('/auth/login', loginRequest, validateRequest, authController.login);
 router.post(
     '/barang',
     authMiddleware,
+    authenticateUser,
     createRequest,
     validateRequest,
     barangController.create
@@ -38,6 +41,7 @@ router.post(
 router.get(
     '/barang',
     authMiddleware,
+    authenticateUser,
     barangController.getAll
 );
 
@@ -45,6 +49,7 @@ router.get(
 router.get(
     '/barang/:id',
     authMiddleware,
+    authenticateUser,
     barangController.getById
 );
 
@@ -52,6 +57,7 @@ router.get(
 router.put(
     '/barang',
     authMiddleware,
+    authenticateUser,
     updateRequest,
     validateRequest,
     barangController.update
@@ -61,6 +67,7 @@ router.put(
 router.delete(
     '/barang/:id',
     authMiddleware,
+    authenticateUser,
     barangController.remove
 );
 
@@ -72,30 +79,36 @@ router.delete(
 router.post(
     '/laporan',
     authMiddleware,
+    authenticateUser,
     createTransaksiRequest,
     validateRequest,
     transaksiController.create
 );
 
 // Get all transaksi
-router.get('/laporan', authMiddleware, transaksiController.getAll);
+router.get('/laporan', authMiddleware,
+    authenticateUser, transaksiController.getAll);
 
 // Get transaksi by ID
-router.get('/laporan/:id', authMiddleware, transaksiController.getById);
+router.get('/laporan/:id', authMiddleware,
+    authenticateUser, transaksiController.getById);
 
 // Update transaksi
 router.put(
     '/laporan',
     authMiddleware,
+    authenticateUser,
     updateTransaksiRequest,
     validateRequest,
     transaksiController.update
 );
 
 // Delete transaksi
-router.delete('/laporan/:id', authMiddleware, transaksiController.delete);
+router.delete('/laporan/:id', authMiddleware,
+    authenticateUser, transaksiController.delete);
 
 // Get all transaksi detail
-router.get('/transaksi', authMiddleware, transaksiController.getAllDetail);
+router.get('/transaksi', authMiddleware,
+    authenticateUser, transaksiController.getAllDetail);
 
 module.exports = router;

@@ -13,6 +13,7 @@ exports.create = async (req, res, next) => {
             'grand_total',
             'detail'
         ]);
+        payload.user_id = req.user.id;
         const data = await transaksiService.createTransaksi(payload);
         return success(res, 'Laporan berhasil dibuat', data);
     } catch (err) {
@@ -59,6 +60,7 @@ exports.update = async (req, res, next) => {
             'grand_total',
             'detail'
         ]);
+        payload.user_id = req.user.id;
         const data = await transaksiService.updateTransaksi(payload.id, payload);
         return success(res, 'Laporan berhasil diupdate', data);
     } catch (err) {
