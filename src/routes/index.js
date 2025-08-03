@@ -23,6 +23,7 @@ router.post('/auth/register', registerRequest, validateRequest, authController.r
 router.post('/auth/login', loginRequest, validateRequest, authController.login);
 router.post('/auth/profile', authMiddleware,authenticateUser,profileRequest, validateRequest, authController.updateProfile);
 router.get('/auth/me', authMiddleware,authenticateUser,authController.authMe);
+router.post('/auth/logout', authMiddleware,authenticateUser,authController.logout);
 
 // ===================
 // Barang Routes
