@@ -108,4 +108,14 @@ async function updateProfile(userId, data) {
   return updatedUser;
 }
 
-module.exports = { register,login, updateProfile };
+async function authMe(id) { 
+  const user = await prisma.user.findFirst({ where: { id } });
+  if (!user) {
+    const error = new Error('Barang tidak ditemukan');
+    error.statusCode = 404;
+    throw error;
+  }
+  return user;
+}
+
+module.exports = { register,login, updateProfile, authMe };
