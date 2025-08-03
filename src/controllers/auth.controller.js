@@ -40,7 +40,17 @@ exports.updateProfile = async (req, res, next) => {
     const payload = only(req.body, ['user_name', 'email']);
     payload.id = req.user.id;
     const auth = await authService.updateProfile(payload.id, payload);
-    return success(res, 'Barang berhasil diperbarui', auth);
+    return success(res, 'Profile berhasil diperbarui', auth);
+  } catch (err) {
+    next(err);
+  }
+};
+
+exports.authMe = async (req, res, next) => {
+  try {        
+    const id = req.user.id;
+    const auth = await authService.authMe(id);
+    return success(res, 'Profile berhasil ditampilkan', auth);
   } catch (err) {
     next(err);
   }

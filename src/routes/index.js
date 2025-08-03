@@ -22,6 +22,7 @@ const { updateTransaksiRequest, createTransaksiRequest } = require('../requests/
 router.post('/auth/register', registerRequest, validateRequest, authController.register);
 router.post('/auth/login', loginRequest, validateRequest, authController.login);
 router.post('/auth/profile', authMiddleware,authenticateUser,profileRequest, validateRequest, authController.updateProfile);
+router.get('/auth/me', authMiddleware,authenticateUser,authController.authMe);
 
 // ===================
 // Barang Routes
